@@ -41,4 +41,3 @@ RUN chmod 755 /home/terraform/runtf.sh
 
 USER terraform
 ENTRYPOINT ["/home/terraform/runtf.sh"]
-
