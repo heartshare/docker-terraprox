@@ -8,11 +8,11 @@ variable "ssh_password" {
 }
 
 data "local_file" "private_key" {
-        filename = "/home/terraform/id_rsa"
+        filename = "/home/terraform/.ssh/id_rsa"
 }
 
 data "local_file" "public_key" {
-        filename = "/home/terraform/id_rsa.pub"
+        filename = "/home/terraform/.ssh/id_rsa.pub"
 }
 
 resource "proxmox_vm_qemu" "cloudinit-vm" {
