@@ -7,6 +7,16 @@ variable "ssh_password" {
     default = "geheim"
 }
 
+variable "vm_name" {
+    type = string
+    default = "myvm"
+}
+
+variable "vm_clone" {
+    type = string
+    default = "t-centos-7.7"
+}
+
 data "local_file" "private_key" {
         filename = "/home/terraform/.ssh/id_rsa"
 }
