@@ -4,4 +4,5 @@ mkdir work
 cp -r `dirname $maintf`/* work
 cd work
 terraform init
-terraform apply --auto-approve $*
+#terraform apply --auto-approve $*
+terraform $* --auto-approve
