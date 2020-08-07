@@ -12,14 +12,14 @@ RUN groupadd -r terraform -g 9901 && useradd -u 9901 --no-log-init -m -r -g terr
 WORKDIR /root
 # the lausser fork contains a patch which copies a cloud-init's dhcp
 # address to self.ssh_host
-RUN go get github.com/lausser/terraform-provider-proxmox/cmd/terraform-provisioner-proxmox
+##RUN go get github.com/lausser/terraform-provider-proxmox/cmd/terraform-provisioner-proxmox
 
 RUN go get github.com/Telmate/proxmox-api-go && \
     go install github.com/Telmate/proxmox-api-go && \
     cp go/bin/proxmox-api-go /usr/local/bin
 
 RUN go get github.com/Telmate/terraform-provider-proxmox/cmd/terraform-provider-proxmox
-RUN cp go/src/github.com/lausser/terraform-provider-proxmox/proxmox/resource_vm_qemu.go go/src/github.com/Telmate/terraform-provider-proxmox/proxmox
+##RUN cp go/src/github.com/lausser/terraform-provider-proxmox/proxmox/resource_vm_qemu.go go/src/github.com/Telmate/terraform-provider-proxmox/proxmox
 RUN go install github.com/Telmate/terraform-provider-proxmox/cmd/terraform-provider-proxmox && \
     cp go/bin/terraform-provider-proxmox /usr/local/bin
 
