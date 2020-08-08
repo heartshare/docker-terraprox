@@ -27,6 +27,11 @@ variable "target_pool" {
     default = "infra"
 }
 
+variable "disk_cache" {
+    type = string
+    default = "none"
+}
+
 data "local_file" "private_key" {
         filename = "${path.module}/id_rsa"
 }
@@ -72,6 +77,7 @@ resource "proxmox_vm_qemu" "cloudinit-vm" {
     size = 4
     backup = false
     iothread = true
+    cache = var.disk_cache
   }
 
   connection {
