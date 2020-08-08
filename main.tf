@@ -27,6 +27,21 @@ variable "target_pool" {
     default = "infra"
 }
 
+variable "disk_storage" {
+    type = string
+    default = "ceph01"
+}
+
+variable "disk_storage_type" {
+    type = string
+    default = "rbd"
+}
+
+variable "disk_size" {
+    type = int
+    default = 4
+}
+
 variable "disk_cache" {
     type = string
     default = "none"
@@ -72,9 +87,9 @@ resource "proxmox_vm_qemu" "cloudinit-vm" {
   disk {
     id = 0
     type = "virtio"
-    storage = "ceph01"
-    storage_type = "rbd"
-    size = 4
+    storage = var.disk_storage
+    storage_type = var.disk_storage_type
+    size = var.disk_size
     backup = false
     iothread = true
     cache = var.disk_cache
