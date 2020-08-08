@@ -38,7 +38,7 @@ variable "disk_storage_type" {
 }
 
 variable "disk_size" {
-    type = int
+    type = number
     default = 4
 }
 
