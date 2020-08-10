@@ -27,6 +27,21 @@ variable "target_pool" {
     default = "infra"
 }
 
+variable "cpu_cores" {
+    type = number
+    default = 4
+}
+
+variable "cpu_sockets" {
+    type = number
+    default = 1
+}
+
+variable "memory" {
+    type = number
+    default = 16384
+}
+
 variable "disk_storage" {
     type = string
     default = "ceph01"
@@ -43,6 +58,11 @@ variable "disk_size" {
 }
 
 variable "disk_cache" {
+    type = string
+    default = "none"
+}
+
+variable "ansible_playbook" {
     type = string
     default = "none"
 }
@@ -69,9 +89,9 @@ resource "proxmox_vm_qemu" "cloudinit-vm" {
   # The destination resource pool for the new VM
   pool = var.target_pool
 
-  cores = 4
-  sockets = 1
-  memory = 16384
+  cores = var.cpu_cores
+  sockets = var.cpu_sockets
+  memory = var.memory
 
   vga {
     type = "std"
@@ -92,7 +112,7 @@ resource "proxmox_vm_qemu" "cloudinit-vm" {
     size = var.disk_size
     backup = false
     iothread = true
-    cache = var.disk_cache
+    #cache = var.disk_cache
   }
 
   connection {
@@ -106,5 +126,12 @@ resource "proxmox_vm_qemu" "cloudinit-vm" {
     inline = [
       "/sbin/ip a"
     ]
+  }
+  provisioner "local-exec" {
+    command =<<EOCMD
+    if [ "${var.ansible_playbook}" != "" ]; then
+      ansible-playbook ansible/playbooks/${var.ansible_playbook} -i ${self.ssh_host}, -u packer --extra-vars ansible_ssh_pass=${var.ssh_password}
+    fi
+    EOCMD
   }
 }
