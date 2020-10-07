@@ -15,7 +15,6 @@ ENV GOPROXY=https://goproxy.io,direct
 # the lausser fork contains a patch which copies a cloud-init's dhcp
 # unicast ipv4 address to self.ssh_host
 RUN git clone https://github.com/lausser/terraform-provider-proxmox
-###RUN go get github.com/lausser/terraform-provider-proxmox/cmd/terraform-provisioner-proxmox
 
 RUN go get github.com/Telmate/proxmox-api-go && \
     go install github.com/Telmate/proxmox-api-go && \
@@ -23,6 +22,7 @@ RUN go get github.com/Telmate/proxmox-api-go && \
 
 RUN go get github.com/Telmate/terraform-provider-proxmox/cmd/terraform-provider-proxmox
 
+# remove later, after the pull request has been accepted
 RUN cp terraform-provider-proxmox/proxmox/resource_vm_qemu.go ./go/pkg/mod/github.com/!telmate/terraform-provider-proxmox@*/proxmox/resource_vm_qemu.go
 RUN rm -rf terraform-provider-proxmox
 RUN go install github.com/Telmate/terraform-provider-proxmox/cmd/terraform-provider-proxmox && \
@@ -33,13 +33,13 @@ RUN go install github.com/Telmate/terraform-provider-proxmox/cmd/terraform-provi
 
 USER terraform
 WORKDIR /home/terraform
-
 RUN  mkdir /home/terraform/.ssh && \
     chmod 700 /home/terraform/.ssh && \
     ssh-keygen -f /home/terraform/.ssh/id_rsa -N ""
-RUN mkdir -p /home/terraform/.terraform.d/plugins/linux_amd64 && \
-    cp /usr/local/bin/terraform-provider-proxmox  /home/terraform/.terraform.d/plugins/linux_amd64/ && \
-    cp /usr/local/bin/terraform-provisioner-proxmox  /home/terraform/.terraform.d/plugins/linux_amd64/
+
+RUN mkdir -p /home/terraform/.terraform.d/plugins/github.com/telmate/proxmox/1.0.0/linux_amd64 && \
+    cp /usr/local/bin/terraform-provider-proxmox  /home/terraform/.terraform.d/plugins/github.com/telmate/proxmox/1.0.0/linux_amd64/ && \
+    cp /usr/local/bin/terraform-provisioner-proxmox /home/terraform/.terraform.d/plugins/github.com/telmate/proxmox/1.0.0/linux_amd64/
 
 USER root
 COPY runtf.sh /home/terraform
