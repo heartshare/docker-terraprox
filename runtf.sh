@@ -1,9 +1,9 @@
 #! /bin/sh
-mkdir work
-maintf=`find / -name main.tf 2>/dev/null | head -1`
-cp -r `dirname $maintf`/* work
-cd work
-test -f id_rsa && chmod 600 id_rsa
+# point to consul
+
+distri=${DISTRIBUTION:-centos-7.7}
+uuid=$(uuidgen)
+uuid=${uuid%%-*}
+
 terraform init
-#terraform apply --auto-approve $*
-terraform $* --auto-approve
+terraform $* -var ssh_password="$SSH_PASSWORD" -var vm_clone=t-${distri} -var vm_name=b-omd-${distri}-${uuid} -var cpu_sockets=2 -var cpu_cores=4 -var memory=32768 --auto-approve

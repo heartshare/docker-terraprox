@@ -129,9 +129,15 @@ resource "proxmox_vm_qemu" "cloudinit-vm" {
   }
   provisioner "local-exec" {
     command =<<EOCMD
-    if [ "${var.ansible_playbook}" != "" ]; then
-      ansible-playbook ansible/playbooks/${var.ansible_playbook} -i ${self.ssh_host}, -u packer --extra-vars ansible_ssh_pass=${var.ssh_password}
-    fi
+    printf "[defaults]\nhost_key_checking = False\n" > ~/.ansible.cfg
+    ansible -m ping -i ${self.ssh_host}, -u packer --extra-vars ansible_ssh_pass=${var.ssh_password} all
     EOCMD
   }
+#  provisioner "local-exec" {
+#    command =<<EOCMD
+#    if [ "${var.ansible_playbook}" != "" ]; then
+#      ansible-playbook ansible/playbooks/${var.ansible_playbook} -i ${self.ssh_host}, -u packer --extra-vars ansible_ssh_pass=${var.ssh_password}
+#    fi
+#    EOCMD
+#  }
 }
