@@ -2,6 +2,7 @@
 # point to consul
 
 distri=${DISTRIBUTION:-centos-7.7}
+product=${PRODUCT:-omd}
 if [ -z "$UNIQUE_TAG" ]; then
   uuid=$(uuidgen)
   uuid=${uuid%%-*}
@@ -22,7 +23,7 @@ EOTF
   cat > consul_node.tf <<EOTF
 provider "consul" {
   address    = "${CONSUL_ADDRESS}"
-  #datacenter = "nyc1"
+  #datacenter = "dc1"
 }
 
 resource "consul_keys" "nslookup" {
@@ -34,12 +35,12 @@ resource "consul_keys" "nslookup" {
   }
 }
 
-resource "consul_node" "hostname" {
-  name    = var.vm_uuid
-  address = proxmox_vm_qemu.cloudinit-vm.ssh_host
-}
-
+# can be used later for dns lookups, services
+#resource "consul_node" "hostname" {
+#  name    = var.vm_uuid
+#  address = proxmox_vm_qemu.cloudinit-vm.ssh_host
+#}
 EOTF
 fi
 terraform init
-terraform $* -var ssh_password="$SSH_PASSWORD" -var vm_clone=t-${distri} -var vm_name=b-omd-${distri}-${uuid} -var cpu_sockets=2 -var cpu_cores=4 -var memory=32768 --auto-approve
+terraform $* -var ssh_password="$SSH_PASSWORD" -var vm_clone=t-${distri} -var vm_name=b-${product}-${distri}-${uuid} -var cpu_sockets=2 -var cpu_cores=4 -var memory=32768 --auto-approve
