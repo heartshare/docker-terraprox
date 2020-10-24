@@ -44,13 +44,13 @@ RUN mkdir -p /home/terraform/.terraform.d/plugins/github.com/telmate/proxmox/1.0
     cp /usr/local/bin/terraform-provisioner-proxmox /home/terraform/.terraform.d/plugins/github.com/telmate/proxmox/1.0.0/linux_amd64/
 
 USER root
-COPY runtf.sh /home/terraform
+COPY entrypoint.sh /home/terraform
 COPY main.tf /home/terraform
 COPY version.tf /home/terraform
 RUN chown terraform:terraform /home/terraform/*
-RUN chmod 755 /home/terraform/runtf.sh
+RUN chmod 755 /home/terraform/entrypoint.sh
 
 USER terraform
 RUN cp .ssh/id* .
 
-ENTRYPOINT ["/home/terraform/runtf.sh"]
+ENTRYPOINT ["/home/terraform/entrypoint.sh"]
