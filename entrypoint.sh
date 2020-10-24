@@ -9,6 +9,11 @@ if [ -z "$UNIQUE_TAG" ]; then
 else
   uuid=${UNIQUE_TAG}
 fi
+if [ -z "$VM_NAME" ]; then
+  vmname="b-${product}-${distri}-${uuid}"
+else
+  vmname=${VM_NAME}
+fi
 
 if [ -n "$CONSUL_ADDRESS" ]; then
   cat > backend.tf <<EOTF
@@ -29,7 +34,7 @@ provider "consul" {
 resource "consul_keys" "nslookup" {
   key {
     name   = "address"
-    path   = "nslookup/\${var.vm_uuid}"
+    path   = "nslookup/\${var.vm_name}"
     value  = proxmox_vm_qemu.cloudinit-vm.ssh_host
     delete = true
   }
@@ -43,4 +48,4 @@ resource "consul_keys" "nslookup" {
 EOTF
 fi
 terraform init
-terraform $* -var ssh_password="$SSH_PASSWORD" -var vm_clone=t-${distri} -var vm_name=b-${product}-${distri}-${uuid} -var cpu_sockets=2 -var cpu_cores=4 -var memory=32768 --auto-approve
+terraform $* -var ssh_password="$SSH_PASSWORD" -var vm_clone=t-${distri} -var vm_name=${vmname} -var cpu_sockets=2 -var cpu_cores=4 -var memory=32768 --auto-approve
