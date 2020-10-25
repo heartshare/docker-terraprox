@@ -21,16 +21,10 @@ RUN go get github.com/Telmate/proxmox-api-go && \
     go install github.com/Telmate/proxmox-api-go && \
     cp go/bin/proxmox-api-go /usr/local/bin
 
-RUN go get github.com/Telmate/terraform-provider-proxmox/cmd/terraform-provider-proxmox
+RUN go get  github.com/Telmate/terraform-provider-proxmox/cmd/terraform-provider-proxmox@0ee80674d823445f83db81af5d37523448d417df
+# PR #230 introduces a bug (repl. return nil with ...VmRead)
 
-# remove later, after the pull request has been accepted
-#RUN cp terraform-provider-proxmox/proxmox/resource_vm_qemu.go ./go/pkg/mod/github.com/!telmate/terraform-provider-proxmox@*/proxmox/resource_vm_qemu.go
-#RUN rm -rf terraform-provider-proxmox
-RUN go install github.com/Telmate/terraform-provider-proxmox/cmd/terraform-provider-proxmox && \
-    cp go/bin/terraform-provider-proxmox /usr/local/bin
-
-RUN go install github.com/Telmate/terraform-provider-proxmox/cmd/terraform-provisioner-proxmox && \
-    cp go/bin/terraform-provisioner-proxmox /usr/local/bin
+RUN cp go/bin/terraform-provider-proxmox /usr/local/bin
 RUN rm -rf go
 
 USER terraform
@@ -39,14 +33,16 @@ RUN  mkdir /home/terraform/.ssh && \
     chmod 700 /home/terraform/.ssh && \
     ssh-keygen -f /home/terraform/.ssh/id_rsa -N ""
 
-RUN mkdir -p /home/terraform/.terraform.d/plugins/github.com/telmate/proxmox/1.0.0/linux_amd64 && \
-    cp /usr/local/bin/terraform-provider-proxmox  /home/terraform/.terraform.d/plugins/github.com/telmate/proxmox/1.0.0/linux_amd64/ && \
-    cp /usr/local/bin/terraform-provisioner-proxmox /home/terraform/.terraform.d/plugins/github.com/telmate/proxmox/1.0.0/linux_amd64/
+RUN mkdir -p ./usr/share/terraform/plugins/terraform.local/local/proxmox/1.0.0/linux_amd64 && \
+    cp /usr/local/bin/terraform-provider-proxmox ./usr/share/terraform/plugins/terraform.local/local/proxmox/1.0.0/linux_amd64/
+# no provisioner needed for cloud-init
 
 USER root
 COPY entrypoint.sh /home/terraform
 COPY main.tf /home/terraform
 COPY version.tf /home/terraform
+COPY variables.tf /home/terraform
+COPY .terraformrc /home/terraform
 RUN chown terraform:terraform /home/terraform/*
 RUN chmod 755 /home/terraform/entrypoint.sh
 
