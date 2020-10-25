@@ -19,6 +19,10 @@ export UNIQUE_TAG="dnstest"
 
 # either VM_NAME or DISTRIBUTION(mandatory)+PRODUCT(not yet mandatory)+UNIQUE_TAG
 
+## Kubernetes
+
+### Create a VM
+This pod runs *terraform apply* and registers the ip address in a consul k/v store. The key is the vm_name
 
 ```yaml
 apiVersion: v1
@@ -74,6 +78,8 @@ spec:
       defaultMode: 0755
 ```
 
+### Destroy a VM
+This pod just needs the same vm_name as the create-pod, then it will run *terraform destroy*
 ```yaml
 apiVersion: v1
 kind: ConfigMap
