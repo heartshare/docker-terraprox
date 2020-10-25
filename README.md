@@ -96,7 +96,7 @@ spec:
   restartPolicy: Never
   containers:
     - name: terraform-apply
-      image: lausser/terraprox
+      image: lausser/terraprox:1.0
       command: [ "/scripts/runscript.sh" ]
       args: ["destroy"]
       volumeMounts:
