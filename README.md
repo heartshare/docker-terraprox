@@ -125,3 +125,19 @@ spec:
       name: scripts
       defaultMode: 0755
 ```
+
+```bash
+kubectl -n dnstest apply -f create_vm.yml
+# wait until vm is up
+kubectl -n dnstest wait --for=condition=complete --timeout=24h job/create-vm
+kubectl -n dnstest delete -f create_vm.yml
+kubectl -n dnstest wait --for=delete --timeout=24h job/create-vm
+
+# run an ansible container
+curl "http://consul-ui.infra-build/v1/kv/nslookup/b-omd-centos-7.7-dnstest?dc=dc1&raw=1
+
+kubectl -n dnstest apply -f destroy_vm.yml
+kubectl -n dnstest wait --for=condition=complete --timeout=24h job/destroy-vm
+kubectl -n dnstest delete -f destroy_vm.yml
+kubectl -n dnstest wait --for=delete --timeout=24h job/destroy-vm
+```
