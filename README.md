@@ -1,6 +1,7 @@
 # docker-terraprox
 Dockerfile, terraform + proxmox provider + sometimes patches
 
+```bash
 docker run --rm -it [--entrypoint /bin/sh]  lausser/terraprox (apply|destroy)
 export PM_USER="packer@pve"
 export PM_PASS="***"
@@ -18,6 +19,7 @@ export PRODUCT="omd"
 export UNIQUE_TAG="dnstest"
 
 # either VM_NAME or DISTRIBUTION(mandatory)+PRODUCT(not yet mandatory)+UNIQUE_TAG
+```
 
 ## Kubernetes
 
