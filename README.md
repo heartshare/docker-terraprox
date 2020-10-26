@@ -24,7 +24,7 @@ export UNIQUE_TAG="dnstest"
 ## Kubernetes
 
 ### Create a VM
-This pod runs *terraform apply* and registers the ip address in a consul k/v store. The key is the vm_name.
+This pod runs **terraform apply** and registers the ip address in a consul k/v store. The key is the vm_name.
 
 ```bash
 kubectl -n dnstest apply -f create_vm.yml
@@ -35,7 +35,7 @@ kubectl -n dnstest wait --for=delete --timeout=24h job/create-vm
 ```
 
 ### Use the VM
-You can run for example run an ansible container.
+You can for example run an ansible container.
 ```bash
 kubectl -n dnstest apply -f run_ansible.yml
 kubectl -n dnstest wait --for=condition=complete --timeout=24h job/ansible
@@ -55,7 +55,7 @@ data:
 ```
 
 ### Destroy a VM
-This pod just needs the same vm_name as the create-pod, then it will run *terraform destroy*.
+This pod just needs the same vm_name as the create-pod, then it will run **terraform destroy**.
 ```bash
 kubectl -n dnstest apply -f destroy_vm.yml
 kubectl -n dnstest wait --for=condition=complete --timeout=24h job/destroy-vm
