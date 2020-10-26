@@ -24,7 +24,7 @@ export UNIQUE_TAG="dnstest"
 ## Kubernetes
 
 The folder *k8s* contains the necessary files to create and destroy Proxmox VMs through kubernetes jobs.  
-First the cfgmap_*.yml files must be applied. They contain the environment variables and scripts. (runscript.sh is for debugging puroses, later you can leave this away and directly jump to the containers' entrypoint.sh)  
+First the cfgmap_*.yml files must be applied. They contain the environment variables and scripts. (runscript.sh is for debugging purposes, later you can leave this away and directly jump to the containers' entrypoint.sh)  
 *cfgmap_env_infra.yml* contains Proxmox credentials and can stay forever. *cfgmap_env_omd.yml* and especially *cfgmap_env_uuid.yml* contain values which might (or in the case of uuid, *should*) change after every run.
 
 ### Create a VM
