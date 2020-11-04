@@ -1,2 +1,4 @@
+* 2020-11-04 1.1
+  entrypoint.sh differentiates between terraform commands
 * 2020-10-25 1.0
   init
