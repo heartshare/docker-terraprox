@@ -47,5 +47,13 @@ resource "consul_keys" "nslookup" {
 #}
 EOTF
 fi
-terraform init
-terraform $* -var ssh_password="$SSH_PASSWORD" -var vm_clone=t-${distri} -var vm_name=${vmname} -var cpu_sockets=2 -var cpu_cores=4 -var memory=32768 --auto-approve
+EXTRA_ARGS="-var ssh_password=\"$SSH_PASSWORD\" -var vm_clone=t-${distri} -var vm_name=${vmname} -var cpu_sockets=2 -var cpu_cores=4 -var memory=32768 --auto-approve"
+if [ "$1" == "apply" ]; then
+  terraform init
+elif [ "$1" == "destroy" ]; then
+  EXTRA_ARGS=""
+else
+  EXTRA_ARGS=""
+fi
+
+terraform $* $EXTRA_ARGS

@@ -5,8 +5,6 @@ metadata:
 data:
   runscript.sh: |
     #!/bin/bash
-    echo args $*
-    sleep 10
     bash -x ./entrypoint.sh $*
     #sleep 100000
 
