@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 # point to consul
 
 distri=${DISTRIBUTION:-centos-7.7}
