@@ -48,8 +48,8 @@ resource "consul_keys" "nslookup" {
 EOTF
 fi
 
+terraform init
 if [ "$1" == "apply" ]; then
-  terraform init
   terraform apply -var ssh_password="$SSH_PASSWORD" -var vm_clone=t-${distri} -var vm_name=${vmname} -var cpu_sockets=2 -var cpu_cores=4 -var memory=32768 --auto-approve
 elif [ "$1" == "destroy" ]; then
   terraform destroy --auto-approve
