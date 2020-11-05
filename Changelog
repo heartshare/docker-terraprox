@@ -1,3 +1,5 @@
+* 2020-11-05 1.1.1
+  fix entrypoint bugs
 * 2020-11-04 1.1
   entrypoint.sh differentiates between terraform commands
 * 2020-10-25 1.0
