@@ -21,7 +21,7 @@ terraform {
   backend "consul" {
     address = "${CONSUL_ADDRESS}"
     scheme  = "http"
-    path    = "build/${distri}/${uuid}"
+    path    = "terraform/${vmname}"
   }
 }
 EOTF
@@ -55,8 +55,13 @@ elif [ "$1" == "apply" ]; then
   terraform apply -var ssh_password="$SSH_PASSWORD" -var vm_clone=t-${distri} -var vm_name=${vmname} -var cpu_sockets=2 -var cpu_cores=4 -var memory=32768 --auto-approve -input=false
 elif [ "$1" == "destroy" ]; then
   terraform destroy --auto-approve -input=false
-elif [[ "$1"  =~ state ]]; then
-  terraform $* --auto-approve -input=false
+elif [ "$1"  == "cleanup" ]; then
+  if [ -n "$CONSUL_ADDRESS" ]; then
+    rm -r backend.tf
+    echo "yes" | TF_INPUT="true" terraform init -force-copy
+    key=$(echo -n "terraform/${vmname}" | sed -e '#/#%2F#g')
+    curl --request DELETE http://${CONSUL_ADDRESS}/v1/kv/$key
+  fi
 else
   echo unknown arg ${1:-empty-}
   exit 1

@@ -6,6 +6,7 @@ RUN apk add --no-cache patch
 RUN apk add --no-cache ansible
 RUN apk add --no-cache sshpass
 RUN apk add --no-cache util-linux
+RUN apk add --no-cache curl
 RUN apk add --no-cache py3-pip
 RUN pip3 install ruamel.yaml
 RUN groupadd -r terraform -g 9901 && useradd -u 9901 --no-log-init -m -r -g terraform terraform

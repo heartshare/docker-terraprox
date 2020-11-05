@@ -1,3 +1,5 @@
+* 2020-11-05 1.2
+  remove the consul tfstate on cleanup
 * 2020-11-05 1.1.4
   use bash for the entrypoint.sh
 * 2020-11-05 1.1.3
