@@ -14,6 +14,15 @@ if [ -z "$VM_NAME" ]; then
 else
   vmname=${VM_NAME}
 fi
+if [ -n "$PM_NODE" ]; then
+  PM_NODE=${PM_NODE// /}
+  if [[ "$PM_NODE" =~ , ]]; then
+    IFS="," read -a nodes <<< $PM_NODE
+    declare -p nodes;
+    PM_NODE=${nodes[$(shuf -n 1 -i 0-$(("${#nodes[@]}" -1)))]}
+  fi
+  VAR_TARGET_NODE="-var target_node=$PM_NODE"
+fi
 
 if [ -n "$CONSUL_ADDRESS" ]; then
   cat > backend.tf <<EOTF
@@ -52,7 +61,7 @@ terraform init
 if [ "$1" == "passthrough" ]; then
   terraform $*
 elif [ "$1" == "apply" ]; then
-  terraform apply -var ssh_password="$SSH_PASSWORD" -var vm_clone=t-${distri} -var vm_name=${vmname} -var cpu_sockets=2 -var cpu_cores=4 -var memory=32768 --auto-approve -input=false
+  terraform apply -var ssh_password="$SSH_PASSWORD" -var vm_clone=t-${distri} -var vm_name=${vmname} -var cpu_sockets=2 -var cpu_cores=4 -var memory=32768 --auto-approve -input=false ${VAR_TARGET_NODE:-}
 elif [ "$1" == "destroy" ]; then
   terraform destroy --auto-approve -input=false
 elif [ "$1"  == "cleanup" ]; then
