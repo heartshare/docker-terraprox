@@ -2,7 +2,13 @@
 Dockerfile, terraform + proxmox provider + sometimes patches
 
 ```bash
-docker run --rm -it [--entrypoint /bin/sh]  lausser/terraprox (apply|destroy)
+docker run \
+    -e PM_USER=packer@pve \
+    -e PM_PASS="$PM_PASS" \
+    -e PM_API_URL=https://10.0.13.13:8006/api2/json \
+
+    -e 
+--rm -it [--entrypoint /bin/sh]  lausser/terraprox (apply|destroy)
 export PM_USER="packer@pve"
 export PM_PASS="***"
 export PM_API_URL="https://proxmox:8006/api2/json"

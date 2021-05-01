@@ -16,6 +16,7 @@ resource "proxmox_vm_qemu" "cloudinit-vm" {
   target_node = var.target_node
   clone = var.vm_clone
   full_clone = false
+  boot = "c"
   agent = 1
 
   os_type = "cloud-init"
