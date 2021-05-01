@@ -35,18 +35,16 @@ resource "proxmox_vm_qemu" "cloudinit-vm" {
   }
 
   network {
-    id = 0
     bridge = "vmbr0"
     model = "virtio"
   }
 
   disk {
-    id = 0
     type = "virtio"
     storage = var.disk_storage
     size = var.disk_size
-    backup = false
-    iothread = true
+    backup = 0
+    iothread = 1
     #cache = var.disk_cache
   }
 
