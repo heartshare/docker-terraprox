@@ -43,7 +43,6 @@ resource "proxmox_vm_qemu" "cloudinit-vm" {
     id = 0
     type = "virtio"
     storage = var.disk_storage
-    storage_type = var.disk_storage_type
     size = var.disk_size
     backup = false
     iothread = true

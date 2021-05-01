@@ -43,14 +43,10 @@ variable "disk_storage" {
     default = "ceph01"
 }
 
-variable "disk_storage_type" {
-    type = string
-    default = "rbd"
-}
-
 variable "disk_size" {
-    type = number
-    default = 4
+    type = string
+    # 32 from proxmox-packer. must not be smaller than the template's disk size
+    default = "32G"
 }
 
 variable "disk_cache" {
