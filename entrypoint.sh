@@ -50,10 +50,29 @@ resource "consul_keys" "nslookup" {
 }
 
 # can be used later for dns lookups, services
-#resource "consul_node" "hostname" {
-#  name    = var.vm_uuid
-#  address = proxmox_vm_qemu.cloudinit-vm.ssh_host
-#}
+resource "consul_node" "hostname" {
+  name    = var.vm_uuid
+  address = proxmox_vm_qemu.cloudinit-vm.ssh_host
+}
+EOTF
+  cat > consul_service.tf <<EOTF
+resource "consul_service" "node_exporter" {
+  name = "node_exporter"
+  node = var.vm_uuid
+  port = 9100
+  tags = ["prometheus", "node_exporter"]
+  check {
+    check_id                          = "service:node_exporter"
+    name                              = "Prometheus Node Exporter"
+    status                            = "passing"
+    http                              = "http://\${proxmox_vm_qemu.cloudinit-vm.ssh_host}:9100"
+    tls_skip_verify                   = true
+    method                            = "GET"
+    interval                          = "60s"
+    timeout                           = "10s"
+    deregister_critical_service_after = "120s"
+  }
+}
 EOTF
 fi
 

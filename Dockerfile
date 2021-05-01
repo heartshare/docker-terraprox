@@ -12,18 +12,15 @@ RUN pip3 install ruamel.yaml
 RUN groupadd -r terraform -g 9901 && useradd -u 9901 --no-log-init -m -r -g terraform terraform
 
 WORKDIR /root
-ENV GO111MODULE=on
+ENV GO111MODULE=auto
 ENV GOPROXY=https://goproxy.io,direct
-# the lausser fork contains a patch which copies a cloud-init's dhcp
-# unicast ipv4 address to self.ssh_host
-#RUN git clone https://github.com/lausser/terraform-provider-proxmox
 
 RUN go get github.com/Telmate/proxmox-api-go && \
     go install github.com/Telmate/proxmox-api-go && \
     cp go/bin/proxmox-api-go /usr/local/bin
 
-RUN go get  github.com/Telmate/terraform-provider-proxmox/cmd/terraform-provider-proxmox@0ee80674d823445f83db81af5d37523448d417df
-# PR #230 introduces a bug (repl. return nil with ...VmRead)
+ENV GO111MODULE=on
+RUN go get  github.com/Telmate/terraform-provider-proxmox/cmd/terraform-provider-proxmox
 
 RUN cp go/bin/terraform-provider-proxmox /usr/local/bin
 RUN rm -rf go
@@ -52,3 +49,4 @@ USER terraform
 RUN cp .ssh/id* .
 
 ENTRYPOINT ["/home/terraform/entrypoint.sh"]
+ADD VERSION .
