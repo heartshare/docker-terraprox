@@ -51,14 +51,14 @@ resource "consul_keys" "nslookup" {
 
 # can be used later for dns lookups, services
 resource "consul_node" "hostname" {
-  name    = var.vm_uuid
+  name    = var.vm_vmname
   address = proxmox_vm_qemu.cloudinit-vm.ssh_host
 }
 EOTF
-  cat > consul_service.tf <<EOTF
+  cat > consul_service.tf.no <<EOTF
 resource "consul_service" "node_exporter" {
   name = "node_exporter"
-  node = var.vm_uuid
+  node = var.vm_vmname
   port = 9100
   tags = ["prometheus", "node_exporter"]
   check {
